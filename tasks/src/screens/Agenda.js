@@ -1,5 +1,10 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import { StyleSheet, 
+    Text, 
+    View, 
+    ImageBackground,
+    FlatList
+} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import todayImage from '../../assets/imgs/today.jpg';
@@ -8,6 +13,38 @@ import Task from '../components/Task'
 
 
 export default class Agenda extends Component {
+    state = {
+        tasks: [
+            { id: Math.random(), desc: 'comprar curso de react', estimateAt: new Date(), doneAt: new Date() },
+            { id: Math.random(), desc: 'Concluir curso', estimateAt: new Date(), doneAt: null },
+            { id: Math.random(), desc: 'comprar curso de react', estimateAt: new Date(), doneAt: new Date() },
+            { id: Math.random(), desc: 'Concluir curso', estimateAt: new Date(), doneAt: null },
+            { id: Math.random(), desc: 'comprar curso de react', estimateAt: new Date(), doneAt: new Date() },
+            { id: Math.random(), desc: 'Concluir curso', estimateAt: new Date(), doneAt: null },
+            { id: Math.random(), desc: 'comprar curso de react', estimateAt: new Date(), doneAt: new Date() },
+            { id: Math.random(), desc: 'Concluir curso', estimateAt: new Date(), doneAt: null },
+            { id: Math.random(), desc: 'comprar curso de react', estimateAt: new Date(), doneAt: new Date() },
+            { id: Math.random(), desc: 'Concluir curso', estimateAt: new Date(), doneAt: null },
+            { id: Math.random(), desc: 'comprar curso de react', estimateAt: new Date(), doneAt: new Date() },
+            { id: Math.random(), desc: 'Concluir curso', estimateAt: new Date(), doneAt: null },
+            { id: Math.random(), desc: 'comprar curso de react', estimateAt: new Date(), doneAt: new Date() },
+            { id: Math.random(), desc: 'Concluir curso', estimateAt: new Date(), doneAt: null },
+            { id: Math.random(), desc: 'comprar curso de react', estimateAt: new Date(), doneAt: new Date() },
+            { id: Math.random(), desc: 'Concluir curso', estimateAt: new Date(), doneAt: null },
+        ]
+    }
+
+    toggleTask = id => {
+        const tasks = this.state.tasks.map(task => {
+            if (task.id ===id) {
+                task = {...task}
+                task.doneAt = task.doneAt ? null : new Date()
+            }
+            return task
+        })
+        this.setState({ tasks })
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -20,9 +57,11 @@ export default class Agenda extends Component {
                     </View>
                 </ImageBackground>
                 <View style={styles.tasksContainer}>
-                    <Task style={styles.tasksContainer} desc='Tarefa Pendente' doneAt={null} />
-                    <Task style={styles.tasksContainer} desc='Tarefa Concluida' doneAt={new Date()} />
-                
+                    <FlatList data={this.state.tasks}
+                        keyExtractor={item => `${item.id}`}
+                        renderItem={({ item }) => 
+                        <Task {...item} toggleTask={this.toggleTask} /> } />
+
                 </View>
             </View>
         )
